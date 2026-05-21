@@ -31,7 +31,10 @@ export const localTripDataRepository: TripDataRepository = {
     }
 
     try {
-      return JSON.parse(raw) as TripData;
+      const parsed = JSON.parse(raw) as Partial<TripData>;
+      const normalized = normalizeTripData(parsed);
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+      return normalized;
     } catch {
       const seeded = createSeedData();
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));
@@ -51,6 +54,31 @@ export const localTripDataRepository: TripDataRepository = {
     return seeded;
   },
 };
+
+export function normalizeTripData(data: Partial<TripData>): TripData {
+  const seeded = createSeedData();
+
+  return {
+    ...seeded,
+    ...data,
+    trip: {
+      ...seeded.trip,
+      ...data.trip,
+      lodging: {
+        ...seeded.trip.lodging,
+        ...data.trip?.lodging,
+      },
+      notes: data.trip?.notes ?? seeded.trip.notes,
+    },
+    familyMembers: data.familyMembers ?? seeded.familyMembers,
+    scheduleItems: data.scheduleItems ?? seeded.scheduleItems,
+    restaurants: data.restaurants ?? seeded.restaurants,
+    photos: data.photos ?? seeded.photos,
+    packingItems: data.packingItems ?? seeded.packingItems,
+    importantLinks: data.importantLinks ?? seeded.importantLinks,
+    suggestions: data.suggestions ?? seeded.suggestions,
+  };
+}
 
 export function useTripData(repository: TripDataRepository = localTripDataRepository) {
   const [data, setData] = useState<TripData>(() => createSeedData());

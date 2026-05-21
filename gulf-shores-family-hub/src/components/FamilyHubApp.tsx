@@ -6,6 +6,7 @@ import {
   Camera,
   Home,
   Info,
+  Lightbulb,
   RotateCcw,
   Utensils,
   Waves,
@@ -15,18 +16,20 @@ import { Dashboard } from "./Dashboard";
 import { PhotoShare } from "./PhotoShare";
 import { RestaurantBoard } from "./RestaurantBoard";
 import { SchedulePlanner } from "./SchedulePlanner";
+import { SuggestionsBoard } from "./SuggestionsBoard";
 import { TripInfo } from "./TripInfo";
 import { Button, cx } from "./ui";
 import { getCurrentTripDay } from "@/lib/date";
 import { useTripData } from "@/lib/storage";
 
-type TabId = "dashboard" | "schedule" | "photos" | "restaurants" | "info";
+type TabId = "dashboard" | "schedule" | "photos" | "restaurants" | "suggestions" | "info";
 
 const tabs: Array<{ id: TabId; label: string; icon: LucideIcon }> = [
   { id: "dashboard", label: "Dashboard", icon: Home },
   { id: "schedule", label: "Schedule", icon: CalendarDays },
   { id: "photos", label: "Photos", icon: Camera },
   { id: "restaurants", label: "Restaurants", icon: Utensils },
+  { id: "suggestions", label: "Suggestions", icon: Lightbulb },
   { id: "info", label: "Trip Info", icon: Info },
 ];
 
@@ -81,6 +84,7 @@ export function FamilyHubApp() {
         {activeTab === "schedule" ? <SchedulePlanner data={data} setData={setData} today={today} /> : null}
         {activeTab === "photos" ? <PhotoShare data={data} setData={setData} today={today} /> : null}
         {activeTab === "restaurants" ? <RestaurantBoard data={data} setData={setData} /> : null}
+        {activeTab === "suggestions" ? <SuggestionsBoard data={data} setData={setData} today={today} /> : null}
         {activeTab === "info" ? <TripInfo data={data} setData={setData} /> : null}
       </main>
 

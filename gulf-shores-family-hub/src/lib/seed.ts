@@ -1,5 +1,5 @@
 import { addDays, toIsoDate } from "./date";
-import type { ImportantLink, Photo, ScheduleItem, TripData } from "./types";
+import type { ImportantLink, Photo, ScheduleItem, Suggestion, TripData } from "./types";
 
 function samplePhoto(title: string, subtitle: string, start: string, end: string): string {
   const svg = `
@@ -206,6 +206,48 @@ export function createSeedData(baseDate = new Date()): TripData {
     },
   ];
 
+  const suggestions: Suggestion[] = [
+    {
+      id: "suggestion-mini-golf",
+      title: "Indoor mini golf or arcade",
+      kind: "activity",
+      category: "rainy day",
+      day: days[3],
+      location: "Gulf Shores / Orange Beach",
+      notes: "Good backup if storms roll in or surf is too rough for swimming.",
+      suggestedBy: "Mike",
+      votes: ["m-dana", "m-mike", "m-kids"],
+      link: "https://www.gulfshores.com/things-to-do/attractions/",
+      createdAt: new Date(`${days[0]}T11:00:00`).toISOString(),
+    },
+    {
+      id: "suggestion-lulus",
+      title: "LuLu's for early dinner",
+      kind: "restaurant",
+      category: "kid-friendly",
+      day: days[1],
+      location: "Gulf Shores",
+      notes: "Casual dinner idea with outdoor space and an easier menu for mixed ages.",
+      suggestedBy: "Dana",
+      votes: ["m-dana", "m-nana"],
+      link: "https://www.gulfshores.com/restaurants/",
+      createdAt: new Date(`${days[0]}T11:20:00`).toISOString(),
+    },
+    {
+      id: "suggestion-sunset-walk",
+      title: "Sunset shell walk",
+      kind: "activity",
+      category: "beach",
+      day: days[2],
+      location: "Condo beach access",
+      notes: "Easy golden-hour beach walk after rest time, before or after family photos.",
+      suggestedBy: "Nana",
+      votes: ["m-nana"],
+      link: "https://www.gulfshoresal.gov/beachsafety",
+      createdAt: new Date(`${days[0]}T11:40:00`).toISOString(),
+    },
+  ];
+
   return {
     trip: {
       title: "Gulf Shores Family Hub",
@@ -276,5 +318,6 @@ export function createSeedData(baseDate = new Date()): TripData {
       { id: "pack-chargers", name: "Chargers and battery pack", category: "Travel", packed: true },
     ],
     importantLinks,
+    suggestions,
   };
 }

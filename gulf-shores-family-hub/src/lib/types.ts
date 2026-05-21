@@ -106,6 +106,22 @@ export type ImportantLink = {
   category: LinkCategory;
 };
 
+export type SuggestionKind = "activity" | "restaurant";
+
+export type Suggestion = {
+  id: string;
+  title: string;
+  kind: SuggestionKind;
+  category: string;
+  day: string;
+  location: string;
+  notes: string;
+  suggestedBy: string;
+  votes: string[];
+  link: string;
+  createdAt: string;
+};
+
 export type TripData = {
   trip: Trip;
   familyMembers: FamilyMember[];
@@ -114,6 +130,7 @@ export type TripData = {
   photos: Photo[];
   packingItems: PackingItem[];
   importantLinks: ImportantLink[];
+  suggestions: Suggestion[];
 };
 
 export type SuggestedDayInput = {
