@@ -1,5 +1,5 @@
 import { CalendarPlus, Camera, CloudSun, MapPin, Sparkles, StickyNote, Utensils } from "lucide-react";
-import { formatDayLabel, formatLongDay, timeToMinutes } from "@/lib/date";
+import { formatDayLabel, formatLongDay, formatTimeLabel, timeToMinutes } from "@/lib/date";
 import type { Photo, ScheduleItem, TripData } from "@/lib/types";
 import { Button, EmptyState, ExternalAnchor, MemberStack, Panel, TypeBadge } from "./ui";
 
@@ -46,7 +46,7 @@ export function Dashboard({ data, today, onNavigate }: DashboardProps) {
             <div className="timeline compact">
               {todaysItems.map((item) => (
                 <article key={item.id} className="timeline-item">
-                  <time>{item.time}</time>
+                  <time dateTime={item.time}>{formatTimeLabel(item.time)}</time>
                   <div>
                     <div className="timeline-title-row">
                       <h3>{item.title}</h3>
@@ -91,7 +91,7 @@ export function Dashboard({ data, today, onNavigate }: DashboardProps) {
               <Utensils size={24} aria-hidden="true" />
               <div>
                 <h3>{nextMeal.title}</h3>
-                <p>{nextMeal.time} | {nextMeal.location}</p>
+                <p>{formatTimeLabel(nextMeal.time)} | {nextMeal.location}</p>
                 <p className="muted">{nextMeal.notes}</p>
               </div>
             </div>

@@ -3,7 +3,7 @@
 import type { Dispatch, FormEvent, SetStateAction } from "react";
 import { useMemo, useState } from "react";
 import { CalendarPlus, Edit3, Plus, Sparkles, Trash2 } from "lucide-react";
-import { formatDayLabel, formatLongDay, getTripDays } from "@/lib/date";
+import { formatDayLabel, formatLongDay, formatTimeLabel, getTimeOptions, getTripDays } from "@/lib/date";
 import { createId } from "@/lib/id";
 import { generateSuggestedDay } from "@/lib/suggestDay";
 import type { ScheduleItem, ScheduleType, SuggestedDayInput, TripData } from "@/lib/types";
@@ -20,6 +20,7 @@ type ScheduleFormState = Omit<ScheduleItem, "id"> & {
 };
 
 const scheduleTypes: ScheduleType[] = ["beach", "meal", "rest", "activity", "photo", "backup", "travel", "note"];
+const timeOptions = getTimeOptions();
 
 export function SchedulePlanner({ data, setData, today }: SchedulePlannerProps) {
   const days = useMemo(() => getTripDays(data.trip.startDate, data.trip.endDate), [data.trip.startDate, data.trip.endDate]);
@@ -163,7 +164,7 @@ export function SchedulePlanner({ data, setData, today }: SchedulePlannerProps) 
           <div className="timeline">
             {visibleItems.map((item) => (
               <article key={item.id} className="timeline-item editable-item">
-                <time>{item.time}</time>
+                <time dateTime={item.time}>{formatTimeLabel(item.time)}</time>
                 <div>
                   <div className="timeline-title-row">
                     <h3>{item.title}</h3>
@@ -254,11 +255,16 @@ export function SchedulePlanner({ data, setData, today }: SchedulePlannerProps) 
             </Field>
 
             <Field label="Family photo time">
-              <input
-                type="time"
+              <select
                 value={suggestInput.familyPhotoTime}
                 onChange={(event) => setSuggestInput((current) => ({ ...current, familyPhotoTime: event.target.value }))}
-              />
+              >
+                {timeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </Field>
 
             <div className="checkbox-stack">
@@ -296,7 +302,7 @@ export function SchedulePlanner({ data, setData, today }: SchedulePlannerProps) 
               </div>
               {suggestedItems.map((item) => (
                 <article key={item.id} className="suggested-item">
-                  <time>{item.time}</time>
+                  <time dateTime={item.time}>{formatTimeLabel(item.time)}</time>
                   <div>
                     <strong>{item.title}</strong>
                     <p>{item.notes}</p>
@@ -321,7 +327,13 @@ export function SchedulePlanner({ data, setData, today }: SchedulePlannerProps) 
               </Field>
               <div className="form-grid">
                 <Field label="Time">
-                  <input value={form.time} type="time" onChange={(event) => setForm((current) => ({ ...current, time: event.target.value }))} />
+                  <select value={form.time} onChange={(event) => setForm((current) => ({ ...current, time: event.target.value }))}>
+                    {timeOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
                 </Field>
                 <Field label="Type">
                   <select

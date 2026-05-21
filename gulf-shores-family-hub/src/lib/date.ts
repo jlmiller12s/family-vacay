@@ -54,3 +54,30 @@ export function timeToMinutes(time: string): number {
   const [hours, minutes] = time.split(":").map(Number);
   return hours * 60 + minutes;
 }
+
+export function formatTimeLabel(time: string): string {
+  const [rawHours, rawMinutes] = time.split(":").map(Number);
+
+  if (!Number.isFinite(rawHours) || !Number.isFinite(rawMinutes)) {
+    return time;
+  }
+
+  const period = rawHours >= 12 ? "PM" : "AM";
+  const displayHours = rawHours % 12 || 12;
+  const displayMinutes = String(rawMinutes).padStart(2, "0");
+
+  return `${displayHours}:${displayMinutes} ${period}`;
+}
+
+export function getTimeOptions(stepMinutes = 15): Array<{ value: string; label: string }> {
+  const options: Array<{ value: string; label: string }> = [];
+
+  for (let minutes = 0; minutes < 24 * 60; minutes += stepMinutes) {
+    const hours = Math.floor(minutes / 60);
+    const minutePart = minutes % 60;
+    const value = `${String(hours).padStart(2, "0")}:${String(minutePart).padStart(2, "0")}`;
+    options.push({ value, label: formatTimeLabel(value) });
+  }
+
+  return options;
+}
